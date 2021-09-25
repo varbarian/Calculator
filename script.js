@@ -107,7 +107,7 @@ function addOperator(value) {
 //Calculate
 function calculate() {
     console.log(`currentOperatorValue [${currentOperatorValue}], previousOperandValue [${previousOperandValue}], currentOperandValue [${currentOperandValue}]`);
-    currentOperandValue = operate(currentOperatorValue, parseInt(previousOperandValue), parseInt(currentOperandValue));
+    currentOperandValue = (operate(currentOperatorValue, parseInt(previousOperandValue), parseInt(currentOperandValue))).toFixed(2);
     currentOperand.textContent = currentOperandValue;
     previousOperandValue = null;
     previousOperand.textContent = '';
