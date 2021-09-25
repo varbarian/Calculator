@@ -21,11 +21,11 @@ function operate(operator, a, b) {
     if (operator == '+') {
         return add(a,b);
     } else if (operator == '-') {
-        return substract(a,b)
+        return substract(a,b);
     } else if (operator == '*') {
-        return multiply(a,b)
+        return multiply(a,b);
     } else if (operator == '/') {
-        return divide(a,b)
+        return divide(a,b);
     }
 };
 
@@ -64,14 +64,13 @@ function equals() {
 };
 function clearScreen(){
     clear.forEach((button) => {
-        button.addEventListener('click', () => {
-            currentOperandValue = null;
-            previousOperandValue = null;
-            previousOperand.textContent = '';
-            currentOperand.textContent = '';
-        })
+        button.addEventListener('click', () => wipeScreenData()
+        )
     })
 };
+
+
+
 
 //Add numbers to operands
 function addNumber(number) {
@@ -106,12 +105,34 @@ function addOperator(value) {
 
 //Calculate
 function calculate() {
-    console.log(`currentOperatorValue [${currentOperatorValue}], previousOperandValue [${previousOperandValue}], currentOperandValue [${currentOperandValue}]`);
-    currentOperandValue = (operate(currentOperatorValue, parseInt(previousOperandValue), parseInt(currentOperandValue))).toFixed(2);
-    currentOperand.textContent = currentOperandValue;
+    if (currentOperandValue != null && previousOperandValue != null && currentOperatorValue != null) {
+        console.log(`currentOperatorValue [${currentOperatorValue}], previousOperandValue [${previousOperandValue}], currentOperandValue [${currentOperandValue}]`);
+        if (previousOperandValue == 0 || currentOperandValue == 0) {
+            wipeScreenData();
+            currentOperand.textContent = `(:`
+            return;
+        }
+        currentOperandValue = (operate(currentOperatorValue, parseInt(previousOperandValue), parseInt(currentOperandValue))).toFixed(2);
+        currentOperand.textContent = currentOperandValue;
+        previousOperandValue = null;
+        previousOperand.textContent = '';
+        currentOperatorValue = null;
+    } else if (currentOperatorValue != null && currentOperatorValue != null){
+        currentOperandValue = previousOperandValue;
+        currentOperand.textContent = currentOperandValue;
+        previousOperandValue = null;
+        previousOperand.textContent = '';
+    } else if (currentOperandValue != null && currentOperatorValue == null) {
+        return;
+    }
+};
+
+
+function wipeScreenData() {
+    currentOperandValue = null;
     previousOperandValue = null;
     previousOperand.textContent = '';
-    currentOperatorValue = null;
+    currentOperand.textContent = '';
 };
 
 operandInput();
