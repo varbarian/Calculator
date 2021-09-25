@@ -112,7 +112,11 @@ function calculate() {
             currentOperand.textContent = `(:`
             return;
         }
-        currentOperandValue = (operate(currentOperatorValue, parseInt(previousOperandValue), parseInt(currentOperandValue))).toFixed(2);
+        currentOperandValue = (operate(currentOperatorValue, parseInt(previousOperandValue), parseInt(currentOperandValue)));
+        //round numbers with long decimals to two positions after .
+        if (currentOperandValue % 1 != 0) {
+            currentOperandValue = currentOperandValue.toFixed(2);
+        };
         currentOperand.textContent = currentOperandValue;
         previousOperandValue = null;
         previousOperand.textContent = '';
