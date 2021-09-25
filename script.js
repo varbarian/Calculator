@@ -62,15 +62,12 @@ function equals() {
         )
     })
 };
-function clearScreen(){
+function clearScreen() {
     clear.forEach((button) => {
         button.addEventListener('click', () => wipeScreenData()
         )
     })
 };
-
-
-
 
 //Add numbers to operands
 function addNumber(number) {
@@ -112,7 +109,8 @@ function calculate() {
             currentOperand.textContent = `(:`
             return;
         }
-        currentOperandValue = (operate(currentOperatorValue, parseInt(previousOperandValue), parseInt(currentOperandValue)));
+        currentOperandValue = (operate(currentOperatorValue, parseFloat(previousOperandValue), parseFloat(currentOperandValue)));
+        console.log(` value is ${currentOperandValue}`);
         //round numbers with long decimals to two positions after .
         if (currentOperandValue % 1 != 0) {
             currentOperandValue = currentOperandValue.toFixed(2);
