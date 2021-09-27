@@ -3,15 +3,12 @@
 function add(a,b) {
     return a + b;
 };
-
 function substract(a,b) {
     return a - b;
 };
-
 function multiply(a,b) {
     return a * b;
 };
-
 function divide(a,b) {
     return a / b;
 };
@@ -34,6 +31,7 @@ const display = document.getElementsByTagName('display');
 const previousOperand = document.getElementById('displayPreviousOperand');
 const currentOperand = document.getElementById('displayCurrentOperand');
 const operands = Array.from(document.getElementsByClassName('operand'));
+const dot = document.getElementById('dot');
 const operators = Array.from(document.getElementsByClassName('operator'));
 const equal = Array.from(document.getElementsByClassName('equals'));
 const clear = Array.from(document.getElementsByClassName('clear'));
@@ -41,6 +39,7 @@ let currentOperandValue = null;
 let previousOperandValue = null;
 let currentOperatorValue = null;
 let storedOperatorValue = null;
+let dotDisable = false;
 
 //  4.  Create the functions that populate the display when you click the number buttons… you should be storing the ‘display value’ in
 //a variable somewhere for use in the next step.
@@ -50,6 +49,9 @@ function operandInput() {
     operands.forEach((button) => {
             button.addEventListener('click', () => addNumber(button.textContent))
     })
+};
+function dotBtnEnabler(){
+dot.addEventListener('click', () => addDot(dot.textContent),{once:true});
 };
 function operatorInput() {
     operators.forEach((button) => {
@@ -74,18 +76,30 @@ function addNumber(number) {
     currentOperand.textContent += number;
     currentOperandValue = currentOperand.textContent;
 };
+//Add dot to operands
+function addDot(dot) {
+    currentOperand.textContent += dot;
+    currentOperandValue = currentOperand.textContent;
+    dotDisable = true;
+};
+
+//ResetDotBtn
+function ResetDotBtn(){
+    if (dotDisable == true) {
+        dotBtnEnabler();
+        dotDisable = false;
+    }
+};
 
 //Add operators. shift Value from current operator to previous
 function addOperator(value) {
+    ResetDotBtn();
     //if this is second operand input
     if (currentOperandValue != null && previousOperandValue != null && currentOperatorValue != null) {
         storedOperatorValue = value;
-        console.log(`stored operator value is ${storedOperatorValue}`);
         calculate();
         currentOperatorValue = storedOperatorValue;
-        console.log(`shifted current operator value to ${currentOperatorValue}`);
         storedOperatorValue = '';
-        console.log(`stored operator value is ${storedOperatorValue}`);
     }
     //if this is the first operand input
     if (currentOperandValue != null && previousOperandValue == null) {
@@ -103,17 +117,16 @@ function addOperator(value) {
 //Calculate
 function calculate() {
     if (currentOperandValue != null && previousOperandValue != null && currentOperatorValue != null) {
-        console.log(`currentOperatorValue [${currentOperatorValue}], previousOperandValue [${previousOperandValue}], currentOperandValue [${currentOperandValue}]`);
+        // console.log(`currentOperatorValue [${currentOperatorValue}], previousOperandValue [${previousOperandValue}], currentOperandValue [${currentOperandValue}]`);
         if (previousOperandValue == 0 || currentOperandValue == 0) {
             wipeScreenData();
             currentOperand.textContent = `(:`
             return;
-        }
+        };
         currentOperandValue = (operate(currentOperatorValue, parseFloat(previousOperandValue), parseFloat(currentOperandValue)));
-        console.log(` value is ${currentOperandValue}`);
         //round numbers with long decimals to two positions after .
         if (currentOperandValue % 1 != 0) {
-            currentOperandValue = currentOperandValue.toFixed(2);
+            currentOperandValue = currentOperandValue.toFixed(1);
         };
         currentOperand.textContent = currentOperandValue;
         previousOperandValue = null;
@@ -135,9 +148,12 @@ function wipeScreenData() {
     previousOperandValue = null;
     previousOperand.textContent = '';
     currentOperand.textContent = '';
+    ResetDotBtn();
 };
 
+//load functions
 operandInput();
 operatorInput();
 equals();
 clearScreen();
+dotBtnEnabler();
