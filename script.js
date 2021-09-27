@@ -35,6 +35,7 @@ const dot = document.getElementById('dot');
 const operators = Array.from(document.getElementsByClassName('operator'));
 const equal = Array.from(document.getElementsByClassName('equals'));
 const clear = Array.from(document.getElementsByClassName('clear'));
+const backspace = document.getElementById('backspace');
 let currentOperandValue = null;
 let previousOperandValue = null;
 let currentOperatorValue = null;
@@ -70,6 +71,7 @@ function clearScreen() {
         )
     })
 };
+backspace.addEventListener('click', () => deleteSymbol());
 
 //Add numbers to operands
 function addNumber(number) {
@@ -132,7 +134,7 @@ function calculate() {
         previousOperandValue = null;
         previousOperand.textContent = '';
         currentOperatorValue = null;
-    } else if (currentOperatorValue != null && currentOperatorValue != null){
+    } else if (currentOperandValue != null && currentOperatorValue != null){
         currentOperandValue = previousOperandValue;
         currentOperand.textContent = currentOperandValue;
         previousOperandValue = null;
@@ -142,7 +144,7 @@ function calculate() {
     }
 };
 
-
+//All clear button
 function wipeScreenData() {
     currentOperandValue = null;
     previousOperandValue = null;
@@ -151,9 +153,16 @@ function wipeScreenData() {
     ResetDotBtn();
 };
 
+//backspace button
+function deleteSymbol(){
+    currentOperand.textContent = (currentOperand.textContent).slice(0,-1);
+    currentOperandValue = currentOperand.textContent;
+};
+
 //load functions
 operandInput();
 operatorInput();
 equals();
 clearScreen();
 dotBtnEnabler();
+
